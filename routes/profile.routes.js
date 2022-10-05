@@ -3,8 +3,9 @@
 // Profile view get the possibility to erase a contact with a click on contact button & automattically erase from a list
 
 
-const router = require("express").Router();
-
+const express = require('express')
+const mongoose = require('mongoose')
+const router = express.Router()
 const User = require("../models/User.model");
 const Contacts = require("../models/Contacts.model");
 const UserList = require("../models/UserList.model");
@@ -14,9 +15,9 @@ const EventReq = require("../models/EventReq.model");
 
 const fileUploader = require('../config/cloudinary.config');
 
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const midd = require('../middleware/jwt.middleware');
+const bcryptjs = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const midd = require('../middleware/jwt.middleware')
 
 
 /*
@@ -36,7 +37,7 @@ const midd = require('../middleware/jwt.middleware');
 */
 
 
-router.get('/api/profile/:userId', function (req, res, next) { // access to user profile
+router.get('/api/profile/:userId', midd, function (req, res, next) { // access to user profile
     User.find()
       .then(function (userFromDB) {
         res.json(userFromDB)
@@ -54,7 +55,7 @@ router.get('/api/profile/:userId', function (req, res, next) { // access to user
 
 // add a contact to the list
 
-router.put('/api/profile/edit/add/:userListId', function (req, res, next) {
+router.put('/api/profile/edit/add/:userListId', midd, function (req, res, next) {
 
     UserList.put({
       list: req.body.userListId
@@ -78,7 +79,7 @@ router.put('/api/profile/edit/add/:userListId', function (req, res, next) {
 
 // remove a contact from the list
 
-router.put('/api/profile/edit/delete/:userListId', function (req, res, next) {
+router.put('/api/profile/edit/delete/:userListId', midd, function (req, res, next) {
 
     UserList.put({
       list: req.body.userListId
@@ -107,3 +108,4 @@ router.put('/api/profile/edit/delete/:userListId', function (req, res, next) {
 */
 
 
+module.exports = router;

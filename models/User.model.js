@@ -23,14 +23,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: 'images/default-avatar.png' // to do
     },
-    contacts: [
-      [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
-    ],
     password: {
       type : String,
-      match: "^(?=.*[0-9])(?=.*[az])(?=.*[AZ])(?=.*[@#$%^&-+=() ])(?=\\S+$).{8, 15}$",
       required: true
-    }
+    },
+    contacts: [
+      {
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+      }
+    ]
   },
   {
     timestamps: true,

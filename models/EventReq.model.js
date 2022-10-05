@@ -7,13 +7,13 @@ const eventReqSchema = new mongoose.Schema(
       type: String
     },
     event: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Event",
       required: true,
     },
     receivers: [
       {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
       }

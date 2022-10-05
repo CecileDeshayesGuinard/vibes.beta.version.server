@@ -15,7 +15,11 @@ const userListSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    list: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+    list: [
+      {
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+      }
+    ]
   },
   {
     timestamps: true,

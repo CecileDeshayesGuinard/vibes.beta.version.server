@@ -7,14 +7,15 @@ const ContactsSchema = new mongoose.Schema(
       type: String
     },
     user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: mongoose.Schema.Types.ObjectId, ref: 'User',
       required: true,
       unique: true
     },
-    list: [
-      {type: Schema.Types.ObjectId,
-       ref: "User"},
+    relations: [
+      {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+      },
     ]
   },
   {

@@ -11,7 +11,7 @@ const eventSchema = new mongoose.Schema(
       required: true,
     },
     maker: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true
     },
@@ -59,13 +59,13 @@ const eventSchema = new mongoose.Schema(
     },
     diffusionList: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "UserList",
       }
     ]
     || 
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "UserContacts",
     },
     acceptance: {

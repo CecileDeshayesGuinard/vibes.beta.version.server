@@ -1,10 +1,18 @@
 const express = require('express')
+const mongoose = require('mongoose')
+const router = express.Router()
+const User = require("../models/User.model");
+const Contacts = require("../models/Contacts.model");
+const UserList = require("../models/UserList.model");
+const UserReq = require("../models/UserReq.model");
+const Event = require("../models/Event.model");
+const EventReq = require("../models/EventReq.model");
+
+const fileUploader = require('../config/cloudinary.config');
+
 const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const midd = require('../middleware/jwt.middleware')
-const router = express.Router()
-
-const User = require('../models/User.model')
 
 
 /*
@@ -33,8 +41,25 @@ router.post('/signup', function (req, res, next) {
         res.status(409).json({errorMessage: "user name or email already taken"}) // if yes, use another email
         return
       }
-      if(!password.match('^(?=.*[0-9])(?=.*[az])(?=.*[AZ])(?=.*[@#$%^&-+=() ])(?=\\S+$).{8, 15}$ ')) { // regex
-        res.status(409).json({errorMessage: "not valid password, you need one capital letter / small letter, one digit and one special symbol"})
+      if(!password.match('^(?=.*[0-9])')) { // regex
+        res.status(409).json({errorMessage: "not valid password, you need 1 digit"})
+        return
+      }
+      if(!password.match('(?=.*[a-z])')) { // regex
+        res.status(409).json({errorMessage: "not valid password, you need one small letter"})
+        return
+      }
+      if(!password.match('(?=.*[A-Z])')) { // regex
+        res.status(409).json({errorMessage: "not valid password, you need one capital letter"})
+        return
+      }
+      if(!password.match('(?=.*[@#$%^&-+=()?!])')) { // regex
+        res.status(409).json({errorMessage: "not valid password, you need one special symbol"})
+        return
+      }
+      if(!password.match('(?=\\S+$).{8,}$')) { // regex
+        res.status(409).json({errorMessage: "not valid password, you need a minimum of 8 caracters without space"})
+        return
       } else {
         console.log('password validate')
       }
@@ -53,7 +78,7 @@ router.post('/signup', function (req, res, next) {
                 _id: userFromDB._id,
                 userName: userFromDB.userName,
                 email: userFromDB.email,
-                phoneNumber: PhoneNumber,
+                phoneNumber: userFromDB.phoneNumber,
               }
             })
           })

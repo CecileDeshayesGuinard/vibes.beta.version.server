@@ -26,16 +26,16 @@ const allRoutes = require("./routes/index.routes");
 app.use("/api", allRoutes);
 
 const indexRouter = require('./routes/index.routes')
-app.use('/api/', indexRouter);
+app.use('/api', indexRouter);
 
 const authRouter = require('./routes/auth.routes')
 app.use('/auth', authRouter)
 
-const accountRouter = require('./routes/account.routes')
-app.use('/auth', isAuthenticated ,accountRouter)
+const accountRouter = require('./routes/account.routes') // ALERT POURQUOI accountRouter, n'a pas d'alias ?
+app.use('/api', isAuthenticated, accountRouter)
 
 const profileRouter = require('./routes/profile.routes.js')
-app.use('/auth', isAuthenticated ,profileRouter)
+app.use('/api', isAuthenticated, profileRouter)
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

@@ -14,11 +14,6 @@ const userReqSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId, ref: 'User',
       required: true,
     },
-    userList: [
-      {
-        type: mongoose.Schema.Types.ObjectId, ref: 'UserList',
-      }
-    ],
     acceptance: {
       type: Boolean 
     }

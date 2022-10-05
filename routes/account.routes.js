@@ -1,7 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const router = express.Router()
-
 const User = require("../models/User.model");
 const Contacts = require("../models/Contacts.model");
 const UserList = require("../models/UserList.model");
@@ -14,6 +13,8 @@ const fileUploader = require('../config/cloudinary.config');
 const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const midd = require('../middleware/jwt.middleware')
+
+
 
 
 /*
@@ -33,7 +34,7 @@ const midd = require('../middleware/jwt.middleware')
 */
 
 
-router.get('/api/account/:userId', function (req, res, next) { // access to user account
+router.get('/account/:userId', midd, function (req, res, next) { // access to user account
   User.find()
     .then(function (userFromDB) {
       res.json(userFromDB)
@@ -42,7 +43,7 @@ router.get('/api/account/:userId', function (req, res, next) { // access to user
 })
 
 
-router.get('/api/account/:userId', (req, res, next) => {
+router.get('/account/:userId', midd, (req, res, next) => {
     const { userId } = req.params; // induction on client side that parameters have same name than in the model
 
     if (!mongoose.Schema.Types.ObjectId.isValid(userId)) { // update to contacts (oter users)
@@ -64,7 +65,7 @@ router.get('/api/account/:userId', (req, res, next) => {
 */
 
 
-router.put('/api/account/edit/:userId', (req, res, next) => {
+router.put('/account/edit/:userId', midd, (req, res, next) => {
     const { userId } = req.params; // induction on client side that parameters have same name than in the model
 
     if (!mongoose.Schema.Types.ObjectId.isValid(userId)) { // update to contacts (oter users)
@@ -85,7 +86,7 @@ router.put('/api/account/edit/:userId', (req, res, next) => {
 */
 
 
-router.delete('/api/account/delete/:userId', (req, res, next) => {
+router.delete('/account/delete/:userId', midd, (req, res, next) => {
     const { userId } = req.params;
     
     if (!mongoose.Schema.Types.ObjectId.isValid(userId)) { // update to contacts (oter users)
@@ -117,7 +118,7 @@ router.delete('/api/account/delete/:userId', (req, res, next) => {
 */
 
 
-router.post('/api/account/create/userList', function (req, res, next) {
+router.post('/account/create/userList', midd, function (req, res, next) {
   
     UserList.create({
       user: req.body.userId,
@@ -133,7 +134,7 @@ router.post('/api/account/create/userList', function (req, res, next) {
 */
 
 
-router.get('/api/account/userList/:userListId', function (req, res, next) { // access to userList
+router.get('/account/userList/:userListId', midd, function (req, res, next) { // access to userList
     UserList.find()
       .then(function (userListFromDB) {
         res.json(userListFromDB)
@@ -142,7 +143,7 @@ router.get('/api/account/userList/:userListId', function (req, res, next) { // a
 })
 
 
-router.get('/api/account/userList/:userListId', (req, res, next) => {
+router.get('/account/userList/:userListId', midd, (req, res, next) => {
     const { userListId } = req.params; // induction on client side that parameters have same name than in the model
 
     if (!mongoose.Schema.Types.ObjectId.isValid(userListId)) {
@@ -165,7 +166,7 @@ router.get('/api/account/userList/:userListId', (req, res, next) => {
 */
 
 
-router.put('/account/edit/:userListId', (req, res, next) => {
+router.put('/account/edit/:userListId', midd, (req, res, next) => {
     const { userListId } = req.params; // induction on client side that parameters have same name than in the model
 
     if (!mongoose.Schema.Types.ObjectId.isValid(userListId)) { // update list
@@ -187,7 +188,7 @@ router.put('/account/edit/:userListId', (req, res, next) => {
 */
 
 
-router.delete('/account/delete/:userListId', (req, res, next) => {
+router.delete('/account/delete/:userListId', midd, (req, res, next) => {
     const { userListId } = req.params;
     
     if (!mongoose.Schema.Types.ObjectId.isValid(userListId)) { // update
@@ -202,4 +203,4 @@ router.delete('/account/delete/:userListId', (req, res, next) => {
 
 
 
-module.exports = router
+module.exports = router;

@@ -18,7 +18,8 @@ const midd = require('../middleware/jwt.middleware')
 
 // Not POST for User because edition only
 
-router.get('/account', function (req, res, next) {
+
+router.get('/account/:userId', function (req, res, next) {
   User.find()
     .then(function (userFromDB) {
       res.json(userFromDB)
@@ -27,15 +28,10 @@ router.get('/account', function (req, res, next) {
 })
 
 router.put('/account/:userId', (req, res, next) => {
-    const { projectId } = req.params;
+    const { userId } = req.params;
    
-    if (!mongoose.Types.ObjectId.isValid(projectId)) {
-      res.status(400).json({ message: 'Specified id is not valid' });
-      return;
-    }
-   
-    Project.findByIdAndUpdate(projectId, req.body, { new: true })
-      .then((updatedProject) => res.json(updatedProject))
+    User.findByIdAndUpdate(userId, req.body, { new: true })
+      .then((updatedUser) => res.json(updatedUser))
       .catch(error => res.json(error));
   });
 

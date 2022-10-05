@@ -9,6 +9,13 @@ const User = require('../models/User.model')
 
 router.post('/signup', function (req, res, next) {
   const { userName, email, phoneNumber, password } = req.body
+
+  if (userName === '') {
+    res.status(403).json({name : "userName", errorMessage: "identifier is mandatory !" });
+  }
+  if (email === '') {
+    res.status(403).json({name : "email", errorMessage: "email is mandatory !" });
+  }
   
   User.findOne({userName: userName, email: email}) // if username & email exist
     .then(function (userFromDB) {
@@ -47,7 +54,12 @@ router.post('/signup', function (req, res, next) {
 
 
 router.post('/login', function (req, res, next) {
-  const { email, password } = req.body
+  const { email, password } = req.body;
+
+  if (email === '' || password === '') {
+    res.status(403).json({errorMessage: "identifier or password missed !" })
+    return;
+  }
 
   User.findOne({email: email}) // we search if the email exist
     .then(userFromDB => {
@@ -67,7 +79,7 @@ router.post('/login', function (req, res, next) {
           authToken: str
         })
       } else {
-        res.status(403).json({errorMessage: "Wrong password"})  // if good password, the token is valid
+        res.status(403).json({errorMessage: "wrong password"})  // if good password, the token is valid
         return
       }
     })

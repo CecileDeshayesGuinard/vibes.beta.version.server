@@ -20,10 +20,12 @@ const userSchema = new Schema(
       type: String,
     },
     userPhoto: {
-      type: String 
+      type: String,
+      default: 'images/default-avatar.png' // to do
     },
     password: {
       type : String,
+      match: "^(?=.*[0-9])(?=.*[az])(?=.*[AZ])(?=.*[@#$%^&-+=() ])(?=\\S+$).{8, 15}$",
       required: true
     }
   },

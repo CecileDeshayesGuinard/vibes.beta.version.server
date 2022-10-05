@@ -13,27 +13,33 @@ router.post('/signup', function (req, res, next) {
   User.findOne({userName: userName, email: email}) // if username & email exist
     .then(function (userFromDB) {
       if (userFromDB) {
-        res.status(409).json({errorMessage: "user name or email already taken"})
+        res.status(409).json({errorMessage: "user name or email already taken"}) // if yes, use another email
         return
       }
+      if(!password.match('^(?=.*[0-9])(?=.*[az])(?=.*[AZ])(?=.*[@#$%^&-+=() ])(?=\\S+$).{8, 15}$ ')) { // regex
+        res.status(409).json({errorMessage: "not valid password, you need one capital letter / small letter, one digit and one special symbol"})
+      } else {
+        console.log('password validate')
+      }
   
-      const hashedPassword = bcryptjs.hashSync(password)
+      const hashedPassword = bcryptjs.hashSync(password) // the password is crypted
   
-      User.create({
+      User.create({ // creation of 4 requested elements in signup page
         userName: userName,
         email: email,
         phoneNumber: phoneNumber,
         password: hashedPassword,
       })
-        .then(function (userFromDB) {
-          res.status(201).json({
-            user: {
-              _id: userFromDB._id,
-              email: userFromDB.email,
-              phoneNumber: PhoneNumber,
-            }
+          .then(function (userFromDB) {
+            res.status(201).json({
+              user: {
+                _id: userFromDB._id,
+                userName: userFromDB.userName,
+                email: userFromDB.email,
+                phoneNumber: PhoneNumber,
+              }
+            })
           })
-        })
         .catch(err => next(err))
     })
     .catch(err => next(err))
@@ -43,14 +49,14 @@ router.post('/signup', function (req, res, next) {
 router.post('/login', function (req, res, next) {
   const { email, password } = req.body
 
-  User.findOne({email: email})
+  User.findOne({email: email}) // we search if the email exist
     .then(userFromDB => {
       if (!userFromDB) {
         res.status(403).json({errorMessage: "this email doesn't exist"})
         return
       }
 
-      const str = jwt.sign({
+      const str = jwt.sign({ // if yes, a jwt is edited for one week
         _id: userFromDB._id,
         email: userFromDB.email,
         userName: userFromDB.userName
@@ -61,14 +67,15 @@ router.post('/login', function (req, res, next) {
           authToken: str
         })
       } else {
-        res.status(403).json({errorMessage: "Wrong password"})
+        res.status(403).json({errorMessage: "Wrong password"})  // if good password, the token is valid
         return
       }
     })
     .catch(err => next(err))
 })
 
-router.get('/verify', midd, function (req, res, next) {
+
+router.get('/verify', midd, function (req, res, next) { // this route is under midd a valid the registered user
   res.json(req.payload)
 })
 

@@ -1,14 +1,13 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
-const userListSchema = new Schema(
+const userListSchema = new mongoose.Schema(
 
   {
     id: {
       type: String
     },
     user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: mongoose.Schema.Types.ObjectId, ref: 'User',
       required: true,
       unique: true
     },
@@ -16,16 +15,13 @@ const userListSchema = new Schema(
       type: String,
       required: true,
     },
-    list: [
-      {type: Schema.Types.ObjectId,
-       ref:"User"},
-    ]
+    list: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
   },
   {
     timestamps: true,
   }
 );
 
-const UserList = model("UserList", userListSchema);
+const UserList = mongoose.model("UserList", userListSchema);
 
 module.exports = UserList;

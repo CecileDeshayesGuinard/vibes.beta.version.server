@@ -1,6 +1,6 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
-const ContactsSchema = new Schema(
+const ContactsSchema = new mongoose.Schema(
 
   {
     id: {
@@ -22,6 +22,6 @@ const ContactsSchema = new Schema(
   }
 );
 
-const Contacts = model("Contacts", ContactsSchema);
+const Contacts = mongoose.model("Contacts", ContactsSchema);
 
 module.exports = Contacts;

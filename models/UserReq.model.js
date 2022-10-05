@@ -1,25 +1,22 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
-const userReqSchema = new Schema(
+const userReqSchema = new mongoose.Schema(
 
   {
     id: {
       type: String
     },
     sender: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: mongoose.Schema.Types.ObjectId, ref: 'User',
       required: true,
     },
     receiver: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: mongoose.Schema.Types.ObjectId, ref: 'User',
       required: true,
     },
     userList: [
       {
-      type: Schema.Types.ObjectId,
-      ref: "UserList",
+        type: mongoose.Schema.Types.ObjectId, ref: 'UserList',
       }
     ],
     acceptance: {
@@ -31,6 +28,6 @@ const userReqSchema = new Schema(
   }
 );
 
-const UserReq = model("UserReq", userReqSchema);
+const UserReq = mongoose.model("UserReq", userReqSchema);
 
 module.exports = UserReq;

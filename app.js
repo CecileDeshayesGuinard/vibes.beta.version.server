@@ -34,6 +34,9 @@ app.use('/auth', authRouter)
 const accountRouter = require('./routes/account.routes')
 app.use('/auth', isAuthenticated ,accountRouter)
 
+const profileRouter = require('./routes/profile.routes.js')
+app.use('/auth', isAuthenticated ,profileRouter)
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 

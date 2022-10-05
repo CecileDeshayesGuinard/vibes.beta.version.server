@@ -1,6 +1,6 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
-const eventReqSchema = new Schema(
+const eventReqSchema = new mongoose.Schema(
 
   {
     id: {
@@ -27,6 +27,6 @@ const eventReqSchema = new Schema(
   }
 );
 
-const EventReq = model("eventReq", eventReqSchema);
+const EventReq = mongoose.model("eventReq", eventReqSchema);
 
 module.exports = EventReq;

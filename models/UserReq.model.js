@@ -13,9 +13,6 @@ const userReqSchema = new mongoose.Schema(
     receiver: {
       type: mongoose.Schema.Types.ObjectId, ref: 'User',
       required: true,
-    },
-    acceptance: {
-      type: Boolean 
     }
   },
   {

@@ -1,17 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const router = express.Router()
-const User = require("../models/User.model");
-const Contacts = require("../models/Contacts.model");
-const UserList = require("../models/UserList.model");
-const UserReq = require("../models/UserReq.model");
-const Event = require("../models/Event.model");
-const EventReq = require("../models/EventReq.model");
-
-const fileUploader = require('../config/cloudinary.config');
-
-const bcryptjs = require('bcryptjs')
-const jwt = require('jsonwebtoken')
 const midd = require('../middleware/jwt.middleware')
 
 
@@ -24,11 +13,13 @@ const midd = require('../middleware/jwt.middleware')
 ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚═════╝      ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚══════╝                                                                                                                                         
 */
 
+
 /*
 ╦  ╔═╗╔═╗╔╦╗╦╔╗╔╔═╗
 ║  ║ ║╠═╣ ║║║║║║║ ╦
 ╩═╝╚═╝╩ ╩═╩╝╩╝╚╝╚═╝
 */
+
 
 // loading is the start page if you are a new user of if JWT token is shut down
 

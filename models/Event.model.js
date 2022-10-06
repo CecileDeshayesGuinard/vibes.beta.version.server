@@ -6,6 +6,9 @@ const eventSchema = new mongoose.Schema(
     id: {
       type: String
     },
+    eventPhoto: {
+      type: String
+    },
     eventName: {
       type: String,
       required: true,
@@ -17,18 +20,18 @@ const eventSchema = new mongoose.Schema(
     },
     date: {
       from: {
-        day: {
+        startingDay: {
           type: String
         },
-        hour: {
+        startingHour: {
           type: String
         }
       },
       to: {
-        day: {
+        endDay: {
           type: String
         },
-        hour: {
+        endHour: {
           type: String
         }
       }
@@ -62,15 +65,13 @@ const eventSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "UserList",
       }
-    ]
-    || 
-    {
+    ],
+    acceptances: [
+      {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "UserContacts",
-    },
-    acceptance: {
-      type: Boolean 
-    }
+      ref: "User",
+      }
+    ]
   }, 
   {
     timestamps: true,

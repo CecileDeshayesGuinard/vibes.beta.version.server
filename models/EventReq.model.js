@@ -17,16 +17,13 @@ const eventReqSchema = new mongoose.Schema(
       ref: "User",
       required: true,
       }
-    ],
-    acceptance: {
-      type: Boolean 
-    }
+    ]
   },
   {
     timestamps: true,
   }
 );
 
-const EventReq = mongoose.model("eventReq", eventReqSchema);
+const EventReq = mongoose.model("EventReq", eventReqSchema);
 
 module.exports = EventReq;

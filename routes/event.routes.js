@@ -209,7 +209,7 @@ router.delete('event/delete/request/:userReqId', midd, (req, res, next) => {
 */
 
 
-router.put('/profile/edit/add/:userListId', midd, function (req, res, next) {
+router.put('/event/edit/request/:eventReqId', midd, function (req, res, next) {
 
     const contacts = req.body.userId;
 

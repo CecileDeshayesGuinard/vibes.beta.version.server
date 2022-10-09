@@ -6,10 +6,10 @@ const eventSchema = new mongoose.Schema(
     id: {
       type: String
     },
-    eventPhoto: {
+    photo: {
       type: String
     },
-    eventName: {
+    name: {
       type: String,
       required: true,
     },
@@ -18,23 +18,11 @@ const eventSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
-    date: {
-      from: {
-        startingDay: {
-          type: String
-        },
-        startingHour: {
-          type: String
-        }
-      },
-      to: {
-        endDay: {
-          type: String
-        },
-        endHour: {
-          type: String
-        }
-      }
+    startAt: {
+      type: String,
+    },
+    endAt: {
+      type: String,
     },
     location: {
       streetName: {
@@ -57,16 +45,16 @@ const eventSchema = new mongoose.Schema(
         required: true
       }
     },
-    eventDescription: {
+    description: {
       type: String
     },
-    diffusionList: [
+    guest: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "UserList",
       }
     ],
-    acceptances: [
+    confirmed: [
       {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

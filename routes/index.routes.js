@@ -36,7 +36,7 @@ router.get('/loading', (req, res, next) => {
 */
 
 
-router.get("/homepage", midd, (req, res, next) => { // under midd process because this page is only viewed if you are logged
+router.get("/:id", midd, (req, res, next) => { // under midd process because this page is only viewed if you are logged
   res.json("you are on the homepage");
 });
 

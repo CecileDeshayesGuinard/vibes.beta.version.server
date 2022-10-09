@@ -4,7 +4,6 @@ const router = express.Router()
 const User = require("../models/User.model");
 const UserReq = require("../models/UserReq.model");
 const Event = require("../models/Event.model");
-const EventReq = require("../models/EventReq.model");
 
 const fileUploader = require('../config/cloudinary.config');
 
@@ -39,7 +38,7 @@ router.get('/event', midd, function (req, res, next) { // access to the event
 })
   
   
-router.get('/event/:eventId', midd, (req, res, next) => {
+router.get('/event/:id', midd, (req, res, next) => {
 
   const { eventId } = req.params; // induction on event side that parameters have same name than in the model
 
@@ -49,7 +48,7 @@ router.get('/event/:eventId', midd, (req, res, next) => {
   }
 
   Event.findById(eventId)
-  .populate('user', 'eventReq')
+  .populate('user')
   .then(user => res.status(200).json(user))
   .catch(error => res.json(error));
 
@@ -103,7 +102,7 @@ router.post('/event', fileUploader.single('mainPhoto'), midd, function (req, res
 */
 
 
-router.put('/event/edit/:eventId', midd, (req, res, next) => {
+router.put('/event/:id', midd, (req, res, next) => {
 
   const { eventId } = req.params;
   
@@ -126,7 +125,7 @@ router.put('/event/edit/:eventId', midd, (req, res, next) => {
 */
 
 
-router.delete('/event/delete/:eventId', midd, (req, res, next) => {
+router.delete('/event/:id', midd, (req, res, next) => {
 
   const { eventId } = req.params;
   
@@ -152,64 +151,13 @@ router.delete('/event/delete/:eventId', midd, (req, res, next) => {
 
 
 /*
-╔═╗╦═╗╔═╗╔═╗╔╦╗╔═╗  ╦═╗╔═╗╔═╗ ╦ ╦╔═╗╔═╗╔╦╗
-║  ╠╦╝║╣ ╠═╣ ║ ║╣   ╠╦╝║╣ ║═╬╗║ ║║╣ ╚═╗ ║ 
-╚═╝╩╚═╚═╝╩ ╩ ╩ ╚═╝  ╩╚═╚═╝╚═╝╚╚═╝╚═╝╚═╝ ╩ 
-*/
-
-
-router.post('/event/create/request', midd, function (req, res, next) {
-   
-  const event = req.body.eventId;
-  const receivers = req.body.userId;
-
-  EventReq.create(req.params.id, {
-    event: event,
-    receivers: [{receivers}]
-  },
-  {new:true})
-    .then((eventReqFromDB)=>{
-      res.status(201).json(eventReqFromDB)
-    })
-    .catch((err)=>{
-    console.log('error creation event request',err)
-    next(err)
-    })
-})
-
-
-
-/*
-╦═╗╔═╗╔═╗ ╦ ╦╔═╗╔═╗╔╦╗  ╦═╗╔═╗╔═╗╦ ╦╔═╗╔═╗╔╦╗
-╠╦╝║╣ ║═╬╗║ ║║╣ ╚═╗ ║   ╠╦╝║╣ ╠╣ ║ ║╚═╗║╣  ║║
-╩╚═╚═╝╚═╝╚╚═╝╚═╝╚═╝ ╩   ╩╚═╚═╝╚  ╚═╝╚═╝╚═╝═╩╝
-*/
-
-
-router.delete('event/delete/request/:userReqId', midd, (req, res, next) => {
-
-  const { eventReqId } = req.params;
-    
-  if (!mongoose.Schema.Types.ObjectId.isValid(eventReqId)) {
-      res.status(400).json({ message: 'Request erased, you\'re not interrested by this event' });
-      return;
-  }
-
-  EventReq.findByIdAndRemove(userReqId)
-  .then(() => res.status(204).send())
-  .catch(error => res.json(error));
-
-});
-
-
-/*
 ╦═╗╔═╗╔═╗ ╦ ╦╔═╗╔═╗╔╦╗  ╔═╗╔═╗╔═╗╔═╗╔═╗╔╦╗╔═╗╔╦╗
 ╠╦╝║╣ ║═╬╗║ ║║╣ ╚═╗ ║   ╠═╣║  ║  ║╣ ╠═╝ ║ ║╣  ║║
 ╩╚═╚═╝╚═╝╚╚═╝╚═╝╚═╝ ╩   ╩ ╩╚═╝╚═╝╚═╝╩   ╩ ╚═╝═╩╝
 */
 
 
-router.put('/event/edit/request/:eventReqId', midd, function (req, res, next) {
+router.put('/events/:id/confirm', midd, function (req, res, next) {
 
     const contacts = req.body.userId;
 

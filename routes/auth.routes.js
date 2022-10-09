@@ -94,7 +94,7 @@ router.post('/signup', function (req, res, next) {
 */
 
 
-router.post('/login', function (req, res, next) {
+router.post('/sessions', function (req, res, next) {
   const { email, password } = req.body;
 
   if (email === '') {
@@ -109,7 +109,7 @@ router.post('/login', function (req, res, next) {
   User.findOne({email: email}) // we search if the email exist
   .then(userFromDB => {
     if (!userFromDB) {
-      res.status(403).json({errorMessage: "this email doesn't exist"})
+      res.status(403).json({findErrorMessage: "this email doesn't exist, retry or signup"})
       return
     }
 

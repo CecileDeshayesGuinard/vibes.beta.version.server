@@ -30,7 +30,7 @@ const midd = require('../middleware/jwt.middleware')
 */
 
 
-router.get('/profile/:userId', midd, function (req, res, next) { // access to user profile
+router.get('/profile/:id', midd, function (req, res, next) { // access to user profile
 
   User.find()
   .then(function (userFromDB) {
@@ -119,7 +119,7 @@ router.put('/profile/edit/delete/:userListId', midd, function (req, res, next) {
 */
 
 
-router.post('/profile/create/request', midd, function (req, res, next) {
+router.post('/requests?user=...', midd, function (req, res, next) {
   
   const sender = req.body.userId;
   const receiver = req.body.userId;
@@ -147,7 +147,7 @@ router.post('/profile/create/request', midd, function (req, res, next) {
 */
 
 
-router.delete('profile/delete/request/:userReqId', midd, (req, res, next) => {
+router.delete('/request/:id', midd, (req, res, next) => {
 
     const { userReqId } = req.params;
     
@@ -170,7 +170,7 @@ router.delete('profile/delete/request/:userReqId', midd, (req, res, next) => {
 */
 
 
-router.put('/profile/edit/request/:userListId', midd, function (req, res, next) {
+router.put('/requests/:id/accept', midd, function (req, res, next) {
 
     const contacts = req.body.userId;
 

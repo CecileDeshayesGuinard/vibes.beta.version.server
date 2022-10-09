@@ -28,7 +28,7 @@ const midd = require('../middleware/jwt.middleware')
 */
 
 
-router.get('/account', midd, function (req, res, next) { // access to user account
+router.get('/users', midd, function (req, res, next) { // access to users
 
   User.find()
   .then(function (userFromDB) {
@@ -39,7 +39,7 @@ router.get('/account', midd, function (req, res, next) { // access to user accou
 })
 
 
-router.get('/account/:userId', midd, (req, res, next) => {
+router.get('/user/:id', midd, (req, res, next) => {
 
   const { userId } = req.params; // induction on client side that parameters have same name than in the model 
 
@@ -63,7 +63,7 @@ router.get('/account/:userId', midd, (req, res, next) => {
 */
 
 
-router.put('/account/edit/:userId', fileUploader.single('userPhoto'), midd, (req, res, next) => {
+router.put('/user/:id', fileUploader.single('userPhoto'), midd, (req, res, next) => {
 
   const { userId } = req.params; // induction on client side that parameters have same name than in the model (management via react)
 
@@ -89,7 +89,7 @@ router.put('/account/edit/:userId', fileUploader.single('userPhoto'), midd, (req
 */
 
 
-router.delete('/account/delete/:userId', midd, (req, res, next) => {
+router.delete('/user/:userId', midd, (req, res, next) => {
 
   const { userId } = req.params;
     
@@ -123,7 +123,7 @@ router.delete('/account/delete/:userId', midd, (req, res, next) => {
 */
 
 
-router.post('/account/create/userList', midd, function (req, res, next) {
+router.post('/list', midd, function (req, res, next) {
 
   const user = req.body.userId;
   const name = req.body.name;
@@ -150,7 +150,7 @@ router.post('/account/create/userList', midd, function (req, res, next) {
 */
 
 
-router.get('/account/userList', midd, function (req, res, next) { // access to userList
+router.get('/list', midd, function (req, res, next) { // access to userList
 
   UserList.find()
   .then(function (userListFromDB) {
@@ -161,7 +161,7 @@ router.get('/account/userList', midd, function (req, res, next) { // access to u
 })
 
 
-router.get('/account/userList/:userListId', midd, (req, res, next) => {
+router.get('/List/:id', midd, (req, res, next) => {
 
 const { userListId } = req.params; // induction on client side that parameters have same name than in the model
 
@@ -186,7 +186,7 @@ const { userListId } = req.params; // induction on client side that parameters h
 */
 
 
-router.put('/account/:userListId', midd, (req, res, next) => {
+router.put('/list/:id', midd, (req, res, next) => {
 
   const { userListId } = req.params; // induction on client side that parameters have same name than in the model
   
@@ -210,7 +210,7 @@ router.put('/account/:userListId', midd, (req, res, next) => {
 */
 
 
-router.delete('/account/delete/:userListId', midd, (req, res, next) => {
+router.delete('/list/:id', midd, (req, res, next) => {
 
   const { userListId } = req.params;
   

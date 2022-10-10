@@ -22,41 +22,43 @@ router.post('/signup', function (req, res, next) {
 
   const { userName, email, phoneNumber, password } = req.body
 
-  if (userName === '') {
-    res.status(403).json({name : "userName", errorMessage: "identifier is mandatory !" });
+  if (!userName) {
+    res.status(400).json({name : "userName", errorMessage: "identifier is mandatory !" }); // erreur 400 = "bad request"
+    return
   }
-  if (email === '') {
-    res.status(403).json({name : "email", errorMessage: "email is mandatory !" });
+  if (!email) {
+    res.status(400).json({name : "email", errorMessage: "email is mandatory !" });
+    return
+  }
+  if(!password.match('^(?=.*[0-9])')) { // regex
+    res.status(400).json({errorMessage: "not valid password, you need 1 digit"})
+    return
+  }
+  if(!password.match('(?=.*[a-z])')) { // regex
+    res.status(400).json({errorMessage: "not valid password, you need one small letter"})
+    return
+  }
+  if(!password.match('(?=.*[A-Z])')) { // regex
+    res.status(400).json({errorMessage: "not valid password, you need one capital letter"})
+    return
+  }
+  if(!password.match('(?=.*[@#$%^&-+=()?!])')) { // regex
+    res.status(400).json({errorMessage: "not valid password, you need one special symbol"})
+    return
+  }
+  if(!password.match('(?=\\S+$).{8,}$')) { // regex
+    res.status(400).json({errorMessage: "not valid password, you need a minimum of 8 caracters without space"})
+    return
+  } else {
+    console.log('password validate')
   }
   
-  User.findOne({userName: userName, email: email}) // if username & email exist
+  User.findOne({email: req.body.email}) // if email exist
   .then(function (userFromDB) {
 
     if (userFromDB) {
-      res.status(409).json({errorMessage: "user name or email already taken"}) // if yes, use another email
+      res.status(409).json({errorMessage: "email already taken"}) // if yes, use another email
       return
-    }
-    if(!password.match('^(?=.*[0-9])')) { // regex
-      res.status(409).json({errorMessage: "not valid password, you need 1 digit"})
-      return
-    }
-    if(!password.match('(?=.*[a-z])')) { // regex
-      res.status(409).json({errorMessage: "not valid password, you need one small letter"})
-      return
-    }
-    if(!password.match('(?=.*[A-Z])')) { // regex
-      res.status(409).json({errorMessage: "not valid password, you need one capital letter"})
-      return
-    }
-    if(!password.match('(?=.*[@#$%^&-+=()?!])')) { // regex
-      res.status(409).json({errorMessage: "not valid password, you need one special symbol"})
-      return
-    }
-    if(!password.match('(?=\\S+$).{8,}$')) { // regex
-      res.status(409).json({errorMessage: "not valid password, you need a minimum of 8 caracters without space"})
-      return
-    } else {
-      console.log('password validate')
     }
 
     const hashedPassword = bcryptjs.hashSync(password) // the password is crypted

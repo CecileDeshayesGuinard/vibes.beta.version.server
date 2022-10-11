@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
     },
     userPhoto: {
       type: String,
-      default: 'images/default-avatar.png' // to do
+      default: 'https://res.cloudinary.com/dhv1kqoqk/image/upload/v1665499592/vibes-main/default-avatar_gillwl.svg'
     },
     password: {
       type : String,

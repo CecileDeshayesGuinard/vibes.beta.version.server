@@ -23,31 +23,36 @@ router.post('/signup', function (req, res, next) {
   const { userName, email, phoneNumber, password } = req.body
 
   if (!userName) {
-    res.status(400).json({name : "userName", errorMessage: "identifier is mandatory !" }); // erreur 400 = "bad request"
+    res.status(400).json({name : "userName", message: "identifiant obligatoire !" }); // erreur 400 = "bad request"
+    console.log(errorMessage)
     return
   }
   if (!email) {
-    res.status(400).json({name : "email", errorMessage: "email is mandatory !" });
+    res.status(400).json({name : "email", message: "email obligatoire !" });
+    return
+  }
+  if (!password) {
+    res.status(400).json({name : "email", message: "Mot de passe obligatoire !" });
     return
   }
   if(!password.match('^(?=.*[0-9])')) { // regex
-    res.status(400).json({errorMessage: "not valid password, you need 1 digit"})
+    res.status(400).json({message: "mdp non valide, min. 1 chiffre"})
     return
   }
   if(!password.match('(?=.*[a-z])')) { // regex
-    res.status(400).json({errorMessage: "not valid password, you need one small letter"})
+    res.status(400).json({message: "mdp non valide, min. 1 lettre minuscule"})
     return
   }
   if(!password.match('(?=.*[A-Z])')) { // regex
-    res.status(400).json({errorMessage: "not valid password, you need one capital letter"})
+    res.status(400).json({message: "mdp non valide, min. 1 lettre capitale"})
     return
   }
   if(!password.match('(?=.*[@#$%^&-+=()?!])')) { // regex
-    res.status(400).json({errorMessage: "not valid password, you need one special symbol"})
+    res.status(400).json({message: "mdp non valide, min. 1 caractère spécial"})
     return
   }
   if(!password.match('(?=\\S+$).{8,}$')) { // regex
-    res.status(400).json({errorMessage: "not valid password, you need a minimum of 8 caracters without space"})
+    res.status(400).json({message: "mdp non valide, min. 8 caractères sans espace"})
     return
   } else {
     console.log('password validate')
@@ -57,7 +62,7 @@ router.post('/signup', function (req, res, next) {
   .then(function (userFromDB) {
 
     if (userFromDB) {
-      res.status(409).json({errorMessage: "email already taken"}) // if yes, use another email
+      res.status(409).json({message: "email already taken"}) // if yes, use another email
       return
     }
 
@@ -100,18 +105,18 @@ router.post('/sessions', function (req, res, next) {
   const { email, password } = req.body;
 
   if (email === '') {
-    res.status(403).json({errorMessage: "identifier is missing !" })
+    res.status(403).json({errorMessage: "identifiant manquant !" })
     return;
   }
   if (password === '') {
-    res.status(403).json({errorMessage: "password is missing !" })
+    res.status(403).json({errorMessage: "mot de passe manquant !" })
     return;
   }
 
   User.findOne({email: email}) // we search if the email exist
   .then(userFromDB => {
     if (!userFromDB) {
-      res.status(403).json({findErrorMessage: "this email doesn't exist, retry or signup"})
+      res.status(403).json({findErrorMessage: "cet email n'existe pas, rééssayez !"})
       return
     }
 

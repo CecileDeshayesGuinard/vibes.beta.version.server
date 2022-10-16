@@ -16,13 +16,14 @@ const eventSchema = new mongoose.Schema(
     maker: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
     },
     startAt: {
       type: String,
+      required: true
     },
     endAt: {
       type: String,
+      required: true
     },
     location: {
       streetName: {

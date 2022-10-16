@@ -7,7 +7,7 @@ const Event = require("../models/Event.model");
 
 const fileUploader = require('../config/cloudinary.config');
 
-const midd = require('../middleware/jwt.middleware')
+/*const midd = require('../middleware/jwt.middleware')*/
 
 
 /*
@@ -27,7 +27,7 @@ const midd = require('../middleware/jwt.middleware')
 */
 
 
-router.get('/event', midd, function (req, res, next) { // access to the event
+router.get('/event', function (req, res, next) { // access to the event
 
   Event.find()
   .then(function (eventFromDB) {
@@ -38,7 +38,7 @@ router.get('/event', midd, function (req, res, next) { // access to the event
 })
   
   
-router.get('/event/:id', midd, (req, res, next) => {
+router.get('/event/:id', (req, res, next) => {
 
   const { eventId } = req.params; // induction on event side that parameters have same name than in the model
 
@@ -63,34 +63,35 @@ router.get('/event/:id', midd, (req, res, next) => {
 */
 
 
-router.post('/event', fileUploader.single('mainPhoto'), midd, function (req, res, next) {
+router.post('/event', fileUploader.single('mainPhoto'), function (req, res, next) {
 
-  const { eventName, maker, startingDay, startingHour, endDay, endHour, streetName, streetNumber, zipCode, cityName, countryName, eventDescription, diffusionList } = req.body;
+  const { name, maker, startAt, endAt, streetName, streetNumber, zipCode, cityName, countryName, eventDescription, diffusionList } = req.body;
   
-  Event.create(req.params.id, {
-    eventPhoto: req.file.path,
-    eventName: eventName,
+  const newEvent = new Event ({
+    /*eventPhoto: req.file.path,*/
+    name: name,
     maker: maker,
-    startingDay: startingDay,
-    startingHour: startingHour,
-    endDay: endDay,
-    endHour: endHour,
-    streetName: streetName,
-    streetNumber: streetNumber,
-    zipCode: zipCode,
-    cityName: cityName,
-    countryName: countryName,
+    startAt: startAt,
+    endAt: endAt,
+    location: {
+      streetName: streetName,
+      streetNumber: streetNumber,
+      zipCode: zipCode,
+      cityName: cityName,
+      countryName: countryName
+    },
     eventDescription: eventDescription,
     diffusionList: diffusionList
-  },
-  {new:true})
-    .then((eventFromDB)=>{
-      res.status(201).json(eventFromDB)
-    })
-    .catch((err)=>{
-      console.log('error creation event',err)
-      next(err)
-    })
+  })
+
+  newEvent.save()
+  .then((newEvent)=>{
+    res.status(201).json(newEvent)
+  })
+  .catch((err)=>{
+    console.log('error creation event',err)
+    next(err)
+  })
 })
 
 
@@ -102,7 +103,7 @@ router.post('/event', fileUploader.single('mainPhoto'), midd, function (req, res
 */
 
 
-router.put('/event/:id', midd, (req, res, next) => {
+router.put('/event/:id', (req, res, next) => {
 
   const { eventId } = req.params;
   
@@ -125,7 +126,7 @@ router.put('/event/:id', midd, (req, res, next) => {
 */
 
 
-router.delete('/event/:id', midd, (req, res, next) => {
+router.delete('/event/:id', (req, res, next) => {
 
   const { eventId } = req.params;
   
@@ -157,7 +158,7 @@ router.delete('/event/:id', midd, (req, res, next) => {
 */
 
 
-router.put('/events/:id/confirm', midd, function (req, res, next) {
+router.put('/events/:id/confirm', function (req, res, next) {
 
     const contacts = req.body.userId;
 

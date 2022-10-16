@@ -67,24 +67,19 @@ router.post('/signup', function (req, res, next) {
     }
 
     const hashedPassword = bcryptjs.hashSync(password) // the password is crypted
-
-    User.create({ // creation of 4 requested elements in signup page
+    
+    const newUser = new User ({ // creation of 4 requested elements in signup page
       userName: userName,
       email: email,
       phoneNumber: phoneNumber,
       password: hashedPassword,
     })
-        .then(function (userFromDB) {
-          res.status(201).json({
-            user: {
-              _id: userFromDB._id,
-              userName: userFromDB.userName,
-              email: userFromDB.email,
-              phoneNumber: userFromDB.phoneNumber,
-            }
-          })
-        })
-      .catch(err => next(err))
+
+    newUser.save()
+    .then((newUser)=>{
+      res.status(201).json(newUser)
+    })
+    .catch(err => next(err))
   })
   .catch(err => next(err))
 

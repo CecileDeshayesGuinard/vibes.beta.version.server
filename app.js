@@ -31,14 +31,11 @@ app.use('/api', indexRouter);
 const authRouter = require('./routes/auth.routes');
 app.use('/auth', authRouter);
 
-const accountRouter = require('./routes/account.routes');
-app.use('/api', isAuthenticated, accountRouter);
-
-const profileRouter = require('./routes/profile.routes.js');
-app.use('/api', isAuthenticated, profileRouter);
+const userRouter = require('./routes/user.routes');
+app.use('/api', userRouter);
 
 const eventRouter = require('./routes/event.routes.js');
-app.use('/api', isAuthenticated, eventRouter);
+app.use('/api', eventRouter);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

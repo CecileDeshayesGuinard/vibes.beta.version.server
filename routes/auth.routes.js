@@ -135,7 +135,7 @@ router.post('/sessions', function (req, res, next) {
 })
 
 
-router.get('/verify', midd, function (req, res, next) { // this route is under midd a valid the registered user
+router.get('/verify', function (req, res, next) { // this route is under midd a valid the registered user
   res.json(req.payload)
 })
 

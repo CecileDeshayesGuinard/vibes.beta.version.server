@@ -5,9 +5,9 @@ const midd = expressjwt({
   algorithms: ["HS256"],
   requestProperty: 'payload', 
   getToken: function (req) {
-    // req.headers.authorization "Bearer 1234123412341234kj123k4jhk123jh4.2134k12jh34k"
+    //req.headers.authorization "Bearer 1234123412341234kj123k4jhk123jh4.2134k12jh34k"
 
-    return req.headers.authorization.split(' ')[1]
+    return req.headers.authorization.split(' ')[1] // Cannot read properties of undefined (reading 'split')
   }
 })
 

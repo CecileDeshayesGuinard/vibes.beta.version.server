@@ -62,7 +62,18 @@ router.get('/users/:userId', (req, res, next) => {
 */
 
 
-router.put('/users/:userId', fileUploader.single('userPhoto'), (req, res, next) => {
+router.post("/upload", fileUploader.single("userPhoto"), (req, res, next) => {
+ 
+  if (!req.file) {
+    res.status(400).json({ message: 'Fichier non téléchargé' });
+    return;
+  }
+  
+  res.json({ userPhoto: req.file.path });
+});
+
+
+router.put('/users/:userId', (req, res, next) => {
 
   const { userId } = req.params;
 
@@ -70,11 +81,13 @@ router.put('/users/:userId', fileUploader.single('userPhoto'), (req, res, next) 
     res.status(400).json({ message: 'Une erreur est survenue' });
     return;
   }
-
-  /*const userPhoto = req.file.path*/
   
-  User.findByIdAndUpdate(userId, req.body, { new: true, /*userPhoto: userPhoto*/})
-  .then((updatedUser) => res.json(updatedUser), res.status(400).json({message: 'Compte édité'}))
+  User.findByIdAndUpdate(userId, req.body, { new: true })
+  .then((updatedUser) => {
+    // TODO: a toi
+    //res.status(400).json({updatedUser), // 400 alors que ca s'est bien passe ??
+    res.status(200).json(updatedUser) // c tout
+  })
   .catch(error => res.json(error));
 });
 

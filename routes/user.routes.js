@@ -38,7 +38,7 @@ router.get('/users', midd, function (req, res, next) { // access to users
 })
 
 
-router.get('/user/:userId', (req, res, next) => {
+router.get('/users/:userId', (req, res, next) => {
 
   const { userId } = req.params; // induction on client side that parameters have same name than in the model 
 
@@ -62,19 +62,19 @@ router.get('/user/:userId', (req, res, next) => {
 */
 
 
-router.put('/user/:userId', fileUploader.single('userPhoto'), (req, res, next) => {
+router.put('/users/:userId', fileUploader.single('userPhoto'), (req, res, next) => {
 
   const { userId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
-    res.status(400).json({ message: 'L\'id spécifié n\'est pas valide' });
+    res.status(400).json({ message: 'Une erreur est survenue' });
     return;
   }
 
-  const userPhoto = req.file.path;
+  /*const userPhoto = req.file.path*/
   
-  User.findByIdAndUpdate(userId, req.body, { new: true, userPhoto: userPhoto})
-  .then((updatedUser) => res.json(updatedUser))
+  User.findByIdAndUpdate(userId, req.body, { new: true, /*userPhoto: userPhoto*/})
+  .then((updatedUser) => res.json(updatedUser), res.status(400).json({message: 'Compte édité'}))
   .catch(error => res.json(error));
 });
 
@@ -86,7 +86,7 @@ router.put('/user/:userId', fileUploader.single('userPhoto'), (req, res, next) =
 */
 
 
-router.delete('/user/:userId', (req, res, next) => {
+router.delete('/users/:userId', (req, res, next) => {
 
   const { userId } = req.params;
     
@@ -148,7 +148,7 @@ router.post('/list', midd, function (req, res, next) {
 */
 
 
-router.get('/list', function (req, res, next) { // access to userList
+router.get('/lists', function (req, res, next) { // access to userList
 
   UserList.find()
   .then(function (userListFromDB) {
@@ -159,7 +159,7 @@ router.get('/list', function (req, res, next) { // access to userList
 })
 
 
-router.get('/List/:id', (req, res, next) => {
+router.get('/Lists/:id', (req, res, next) => {
 
 const { userListId } = req.params; // induction on client side that parameters have same name than in the model
 
@@ -184,7 +184,7 @@ const { userListId } = req.params; // induction on client side that parameters h
 */
 
 
-router.put('/list/:id', (req, res, next) => {
+router.put('/lists/:id', (req, res, next) => {
 
   const { userListId } = req.params; // induction on client side that parameters have same name than in the model
   
@@ -208,7 +208,7 @@ router.put('/list/:id', (req, res, next) => {
 */
 
 
-router.delete('/list/:id', (req, res, next) => {
+router.delete('/lists/:id', (req, res, next) => {
 
   const { userListId } = req.params;
   

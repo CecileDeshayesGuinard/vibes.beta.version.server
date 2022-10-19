@@ -126,7 +126,7 @@ router.post('/sessions', function (req, res, next) {
       const authToken = jwt.sign( 
         payload,
         process.env.TOKEN_SECRET,
-        { algorithm: 'HS256', expiresIn: "168h" }
+        { algorithm: 'HS256', expiresIn: "3" }
       );
 
       res.status(200).json({ authToken: authToken });
@@ -137,12 +137,19 @@ router.post('/sessions', function (req, res, next) {
     }
   })
   .catch(err => res.status(500).json({ message: "Internal Server Error" }));
-    
 })
 
 router.get('/verify', midd, (req, res, next) => {
   console.log(`req.payload`, req.payload);
   res.status(200).json(req.payload);
+});
+
+
+router.post('/logout', (req, res, next) => {
+  req.session.destroy(err => {
+    if (err) next(err);
+    res.redirect('/');
+  });
 });
 
 

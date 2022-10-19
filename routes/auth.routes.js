@@ -1,11 +1,13 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const router = express.Router()
+const express = require('express');
+const mongoose = require('mongoose');
+const router = express.Router();
 const User = require("../models/User.model");
 
-const bcryptjs = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const midd = require('../middleware/jwt.middleware')
+const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const midd = require('../middleware/jwt.middleware');
+
+const saltRounds = 10;
 
 
 /*
@@ -66,7 +68,8 @@ router.post('/signup', function (req, res, next) {
       return
     }
 
-    const hashedPassword = bcryptjs.hashSync(password) // the password is crypted
+    const salt = bcryptjs.genSaltSync(saltRounds);
+    const hashedPassword = bcryptjs.hashSync(password, salt);
     
     const newUser = new User ({ // creation of 4 requested elements in signup page
       userName: userName,
@@ -100,43 +103,47 @@ router.post('/sessions', function (req, res, next) {
   const { email, password } = req.body;
 
   if (email === '') {
-    res.status(403).json({errorMessage: "identifiant manquant !" })
+    res.status(403).json({message: "identifiant manquant !" })
     return;
   }
   if (password === '') {
-    res.status(403).json({errorMessage: "mot de passe manquant !" })
+    res.status(403).json({message: "mot de passe manquant !" })
     return;
   }
 
-  User.findOne({email: email}) // we search if the email exist
+  User.findOne({email: req.body.email}) // we search if the email exist
   .then(userFromDB => {
     if (!userFromDB) {
-      res.status(403).json({findErrorMessage: "cet email n'existe pas, rééssayez !"})
+      res.status(403).json({message: "cet email n'existe pas, rééssayez !"})
       return
     }
+    
+    const passwordCorrect = bcryptjs.compareSync(password, userFromDB.password);
 
-    const str = jwt.sign({ // if yes, a jwt is edited for one week
-      _id: userFromDB._id,
-      email: userFromDB.email,
-      userName: userFromDB.userName
-    }, process.env.TOKEN_SECRET, {algorithm: "HS256", expiresIn: '168h'})
+    if (passwordCorrect) {
+      const { _id, email } = userFromDB;
+      const payload = { _id, email };
+      const authToken = jwt.sign( 
+        payload,
+        process.env.TOKEN_SECRET,
+        { algorithm: 'HS256', expiresIn: "168h" }
+      );
 
-    if (bcryptjs.compareSync(password, userFromDB.password)) {
-      res.json({
-        authToken: str
-      })
-    } else {
-      res.status(403).json({errorMessage: "wrong password"})  // if good password, the token is valid
+      res.status(200).json({ authToken: authToken });
+    }
+    else {
+      res.status(401).json({ message: "Mot de passe incorrect" });
       return
     }
   })
-  .catch(err => next(err))
+  .catch(err => res.status(500).json({ message: "Internal Server Error" }));
     
 })
 
+router.get('/verify', midd, (req, res, next) => {
+  console.log(`req.payload`, req.payload);
+  res.status(200).json(req.payload);
+});
 
-router.get('/verify', function (req, res, next) { // this route is under midd a valid the registered user
-  res.json(req.payload)
-})
 
 module.exports = router

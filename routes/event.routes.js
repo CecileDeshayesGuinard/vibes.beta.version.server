@@ -7,7 +7,7 @@ const Event = require("../models/Event.model");
 
 const fileUploader = require('../config/cloudinary.config');
 
-/*const midd = require('../middleware/jwt.middleware')*/
+const midd = require('../middleware/jwt.middleware')
 
 
 /*
@@ -42,7 +42,7 @@ router.get('/event/:id', (req, res, next) => {
 
   const { eventId } = req.params; // induction on event side that parameters have same name than in the model
 
-  if (!mongoose.Schema.Types.ObjectId.isValid(eventId)) { // check if event exist
+  if (!mongoose.Types.ObjectId.isValid(eventId)) { // check if event exist
     res.status(400).json({ message: 'problem to find the event' });
     return;
   }
@@ -130,7 +130,7 @@ router.delete('/event/:id', (req, res, next) => {
 
   const { eventId } = req.params;
   
-  if (!mongoose.Schema.Types.ObjectId.isValid(eventId)) { // update to contacts (oter users)
+  if (!mongoose.ypes.ObjectId.isValid(eventId)) { // update to contacts (oter users)
     res.status(400).json({ message: 'problem to find the account' });
     return;
   }  

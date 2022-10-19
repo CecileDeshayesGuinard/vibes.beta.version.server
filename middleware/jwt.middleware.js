@@ -1,14 +1,30 @@
-const { expressjwt } = require('express-jwt')
-
-const midd = expressjwt({
+// middleware/jwt.middleware.js
+ 
+const { expressjwt: jwt } = require("express-jwt");
+ 
+// Instantiate the JWT token validation middleware
+const midd = jwt({
   secret: process.env.TOKEN_SECRET,
   algorithms: ["HS256"],
   requestProperty: 'payload', 
-  getToken: function (req) {
-    //req.headers.authorization "Bearer 1234123412341234kj123k4jhk123jh4.2134k12jh34k"
-
-    return req.headers.authorization.split(' ')[1] // Cannot read properties of undefined (reading 'split')
-  }
-})
-
+  getToken: getTokenFromHeaders
+});
+ 
+ 
+// Function used to extracts the JWT token from the request's 'Authorization' Headers
+function getTokenFromHeaders (req) {
+  
+  // Check if the token is available on the request Headers
+  if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
+ 
+    // Get the encoded token string and return it
+    const token = req.headers.authorization.split(" ")[1];
+    return token;
+  } 
+  
+  return null;
+}
+ 
+ 
+// Export the middleware so that we can use it to create a protected routes
 module.exports = midd

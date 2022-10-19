@@ -12,9 +12,9 @@ const userListSchema = new mongoose.Schema(
     name: {
       type: String,
     },
-    list: {
+    list: [{
       type: mongoose.Schema.Types.ObjectId, ref: 'User'
-    }
+    }]
   },
   {
     timestamps: true,

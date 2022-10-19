@@ -7,7 +7,7 @@ const UserList = require("../models/UserList.model");
 const UserReq = require("../models/UserReq.model");
 
 const fileUploader = require('../config/cloudinary.config');
-/*const midd = require('../middleware/jwt.middleware')*/
+const midd = require('../middleware/jwt.middleware')
 
 
 /*
@@ -27,7 +27,7 @@ const fileUploader = require('../config/cloudinary.config');
 */
 
 
-router.get('/users', function (req, res, next) { // access to users
+router.get('/users', midd, function (req, res, next) { // access to users
 
   User.find()
   .then(function (userFromDB) {
@@ -38,12 +38,12 @@ router.get('/users', function (req, res, next) { // access to users
 })
 
 
-router.get('/user/:id', (req, res, next) => {
+router.get('/user/:userId', (req, res, next) => {
 
   const { userId } = req.params; // induction on client side that parameters have same name than in the model 
 
-  if (!mongoose.Schema.Types.ObjectId.isValid(userId)) { // update to contacts (oter users)
-    res.status(400).json({ message: 'problem to find the account' });
+  if (!mongoose.Types.ObjectId.isValid(userId)) { // update to contacts (oter users)
+    res.status(400).json({ message: 'Problème pour trouver le compte' });
     return;
   }
 
@@ -62,13 +62,12 @@ router.get('/user/:id', (req, res, next) => {
 */
 
 
-router.put('/user/:id', fileUploader.single('userPhoto'), (req, res, next) => {
+router.put('/user/:userId', fileUploader.single('userPhoto'), (req, res, next) => {
 
-  const { userId } = req.params; // induction on client side that parameters have same name than in the model (management via react)
+  const { userId } = req.params;
 
-
-  if (!mongoose.Schema.Types.ObjectId.isValid(userId)) { // update to contacts (oter users)
-    res.status(400).json({ message: 'problem to find the account' });
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    res.status(400).json({ message: 'L\'id spécifié n\'est pas valide' });
     return;
   }
 
@@ -77,7 +76,6 @@ router.put('/user/:id', fileUploader.single('userPhoto'), (req, res, next) => {
   User.findByIdAndUpdate(userId, req.body, { new: true, userPhoto: userPhoto})
   .then((updatedUser) => res.json(updatedUser))
   .catch(error => res.json(error));
-
 });
 
 
@@ -88,12 +86,12 @@ router.put('/user/:id', fileUploader.single('userPhoto'), (req, res, next) => {
 */
 
 
-router.delete('/user/:id', (req, res, next) => {
+router.delete('/user/:userId', (req, res, next) => {
 
   const { userId } = req.params;
     
-  if (!mongoose.Schema.Types.ObjectId.isValid(userId)) { // update to contacts (oter users)
-    res.status(400).json({ message: 'problem to find the account' });
+  if (!mongoose.Types.ObjectId.isValid(userId)) { // update to contacts (oter users)
+    res.status(400).json({ message: 'Problème pour effacer le compte' });
     return;
   }
 
@@ -122,7 +120,7 @@ router.delete('/user/:id', (req, res, next) => {
 */
 
 
-router.post('/list', function (req, res, next) {
+router.post('/list', midd, function (req, res, next) {
 
   const { user, name } = req.body;
 
@@ -165,7 +163,7 @@ router.get('/List/:id', (req, res, next) => {
 
 const { userListId } = req.params; // induction on client side that parameters have same name than in the model
 
-  if (!mongoose.Schema.Types.ObjectId.isValid(userListId)) {
+  if (!mongoose.Types.ObjectId.isValid(userListId)) {
       res.status(400).json({ message: 'problem to find the list' });
       return;
   }
@@ -190,7 +188,7 @@ router.put('/list/:id', (req, res, next) => {
 
   const { userListId } = req.params; // induction on client side that parameters have same name than in the model
   
-  if (!mongoose.Schema.Types.ObjectId.isValid(userListId)) { // update list
+  if (!mongoose.Types.ObjectId.isValid(userListId)) { // update list
       res.status(400).json({ message: 'problem to find the list' });
       return;
   }
@@ -214,7 +212,7 @@ router.delete('/list/:id', (req, res, next) => {
 
   const { userListId } = req.params;
   
-  if (!mongoose.Schema.Types.ObjectId.isValid(userListId)) { // update
+  if (!mongoose.Types.ObjectId.isValid(userListId)) { // update
     res.status(400).json({ message: 'problem to find the list' });
     return;
   }  
@@ -373,7 +371,7 @@ router.delete('/request/:id', (req, res, next) => {
 
     const { userReqId } = req.params;
     
-    if (!mongoose.Schema.Types.ObjectId.isValid(userReqId)) {
+    if (!mongoose.Types.ObjectId.isValid(userReqId)) {
         res.status(400).json({ message: 'Request erased, no relation between users' });
         return;
     }
